@@ -44,7 +44,7 @@ index=main sourcetype=linux_secure source="linux_auth_logs.json" host="ubuntu"
 | sort -count
 ```
 📸
-![Most targeted SSH username](./images/q1_user_attempts.png)
+![Most targeted SSH username](./images/q1-most-brute-user.png)
 
 ### 🔸 Question 2: What is the IP address of user thor?
 ```spl
@@ -54,7 +54,7 @@ index=main sourcetype=linux_secure source="linux_auth_logs.json" host="ubuntu"
 | stats count by ip
 ```
 📸
-![IP address that targeted thor](./images/q2_thor_ip.png)
+![IP address that targeted thor](./images/q2-thor-ip.png)
 
 
 🔸 Question 3: How many times did user thor fail to login?
@@ -64,8 +64,7 @@ index=main sourcetype=linux_secure source="linux_auth_logs.json" host="ubuntu"
 | stats count
 ```
 📸
-![Failed login attempts for user thor](./images/q3_thor_failures.png)
-
+![Failed login attempts for user thor](./images/q3-thor-fail-count.png)
 
 ## 🧾 Evidence & Artifacts
 

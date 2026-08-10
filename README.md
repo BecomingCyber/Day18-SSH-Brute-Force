@@ -1,5 +1,9 @@
 # 🛡️ Day #18 – Splunk: Investigating SSH Brute Force Attacks
 
+![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-Passing-success)
+![Python](https://img.shields.io/badge/Python-3.x-blue)
+![Splunk](https://img.shields.io/badge/SIEM-Splunk-orange)
+![MITRE ATT%26CK](https://img.shields.io/badge/Framework-MITRE-red)
 ![Splunk](https://img.shields.io/badge/Splunk-Enterprise%20Security-black)
 ![SOC](https://img.shields.io/badge/Focus-SOC%20Analysis-blue)
 ![Incident Response](https://img.shields.io/badge/Category-Incident%20Response-red)

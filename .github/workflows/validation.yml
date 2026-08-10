@@ -4,14 +4,9 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
-
 
 jobs:
   validate:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -27,6 +22,10 @@ jobs:
     - name: Run SSH evidence validation
       run: |
         python scripts/validate_ssh_evidence.py
+
+    - name: Run Splunk evidence validation
+      run: |
+        python scripts/validate_splunk_evidence.py
 
     - name: Run unit tests
       run: |

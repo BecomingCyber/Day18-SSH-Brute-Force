@@ -7,9 +7,9 @@ required_files = [
     "README.md",
     "findings.md",
     "commands_used.md",
-    "images/ssh-log.png",
-    "images/failed-login.png",
-    "images/firewall-block.png"
+    "images/q1-most-brute-user.png",
+    "images/q2-thor-ip.png",
+    "images/q3-thor-fail-count.png"
 ]
 
 for file in required_files:

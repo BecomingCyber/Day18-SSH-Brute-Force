@@ -37,6 +37,29 @@ Key Splunk capabilities leveraged in this lab included:
 
 ---
 
+# 🛡️ MITRE ATT&CK Mapping
+
+| Technique | ID | Description |
+|---|---|---|
+| Brute Force | T1110 | Adversaries attempt repeated authentication guesses |
+| Password Guessing | T1110.001 | Automated attempts against user credentials |
+| Valid Accounts | T1078 | Potential abuse of compromised credentials |
+
+---
+
+## 🚨 Incident Classification
+
+| Category | Details |
+|---|---|
+| Incident Type | SSH Brute Force Attack |
+| Severity | Medium |
+| Attack Vector | Remote Authentication Abuse |
+| Affected Service | SSH |
+| Primary Indicator | Source IP 98.110.184.71 |
+| Detection Source | Splunk Authentication Logs |
+
+---
+
 ## 📘 Reflection
 
 This lab not only strengthened my familiarity with Splunk’s search capabilities but also reinforced best practices in analyzing authentication abuse scenarios. The ability to pivot on usernames, IP addresses, and behavior patterns is vital in any SOC or Blue Team setting.

@@ -1,40 +1,82 @@
 # 🛡️ Day #18 – Splunk: Investigating SSH Brute Force Attacks
 
-![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)
-![Lab Status](https://img.shields.io/badge/status-complete-success)
-![Splunk](https://img.shields.io/badge/tool-Splunk-informational)
-![30-Day SOC Challenge](https://img.shields.io/badge/Challenge-30--Day--SOC-blue)
-
-## 🎯 Objective
-
-Detect and investigate SSH brute-force attacks using Splunk by analyzing failed login attempts from Linux authentication logs. Identify suspicious users and attacker IP addresses using SPL queries.
+![Splunk](https://img.shields.io/badge/Splunk-Enterprise%20Security-black)
+![SOC](https://img.shields.io/badge/Focus-SOC%20Analysis-blue)
+![Incident Response](https://img.shields.io/badge/Category-Incident%20Response-red)
+![MIT License](https://img.shields.io/badge/License-MIT-green)
 
 ---
 
-## 🖥️ Lab Environment
+# 🎯 Objective
 
-- **Platform**: Ubuntu Server 22.04+
-- **Tool**: Splunk Enterprise / Free Edition
-- **Log File**: `linux_auth_logs.json`
-- **Sourcetype**: `linux_secure`
-- **Index**: `main`
-- **Host**: `ubuntu`
+Detect and investigate SSH brute-force attacks using Splunk by analyzing Linux authentication logs.
 
----
+The investigation focuses on identifying:
 
-## 🧪 Lab Setup
+- Suspicious usernames
+- Source IP addresses
+- Failed authentication patterns
+- Indicators of unauthorized access attempts
 
-1. **Install Splunk on Ubuntu**
-2. **Ingest `linux_auth_logs.json`** using:
-   - `source="linux_auth_logs.json"`
-   - `sourcetype="linux_secure"`
-3. **Start Search & Reporting** app in Splunk
+This lab simulates a common SOC analyst workflow during an authentication abuse investigation.
 
 ---
 
-## 🔍 Investigation Steps
+# 🖥️ Lab Environment
 
-### 🔸 Question 1: Which user attempted the most SSH brute force logins?
+| Component | Details |
+|---|---|
+| Operating System | Ubuntu Server 22.04+ |
+| SIEM Platform | Splunk Enterprise / Free Edition |
+| Log Source | `linux_auth_logs.json` |
+| Sourcetype | `linux_secure` |
+| Index | `main` |
+| Host | `ubuntu` |
+
+---
+
+# 🧪 Lab Setup
+
+## 1. Configure Splunk
+
+Installed and configured Splunk for Linux authentication log analysis.
+
+## 2. Import Authentication Logs
+
+Imported:
+
+```text
+linux_auth_logs.json
+```
+
+Configured:
+
+```text
+source="linux_auth_logs.json"
+sourcetype="linux_secure"
+index="main"
+host="ubuntu"
+```
+
+## 3. Begin Investigation
+
+Opened:
+
+```text
+Search & Reporting
+```
+
+and performed SPL-based threat hunting.
+
+---
+
+# 🔍 Investigation Process
+
+## 🔸 Question 1
+
+## Which user attempted the most SSH brute force logins?
+
+### SPL Query
 
 ```spl
 index=main sourcetype=linux_secure source="linux_auth_logs.json" host="ubuntu"
@@ -43,52 +85,172 @@ index=main sourcetype=linux_secure source="linux_auth_logs.json" host="ubuntu"
 | stats count by username
 | sort -count
 ```
-📸
+
+### Evidence
+
+📸 Screenshot:
+
+
 ![Most targeted SSH username](./images/q1-most-brute-user.png)
 
-### 🔸 Question 2: What is the IP address of user thor?
+### Finding
+
+The query identified the username generating the highest number of failed SSH authentication attempts.
+
+---
+
+# 🔸 Question 2
+
+## What is the IP address associated with user thor?
+
+### SPL Query
+
 ```spl
 index=main sourcetype=linux_secure source="linux_auth_logs.json" host="ubuntu"
 "Failed password" "thor"
 | rex field=_raw "from (?<ip>\d{1,3}(?:\.\d{1,3}){3})"
 | stats count by ip
 ```
-📸
+
+### Evidence
+
+📸 Screenshot:
+
 ![IP address that targeted thor](./images/q2-thor-ip.png)
 
+### Finding
 
-🔸 Question 3: How many times did user thor fail to login?
+The investigation extracted the source IP address responsible for failed login attempts against user `thor`.
+
+---
+
+# 🔸 Question 3
+
+## How many times did user thor fail authentication?
+
+### SPL Query
+
 ```spl
 index=main sourcetype=linux_secure source="linux_auth_logs.json" host="ubuntu"
 "Failed password" "thor"
 | stats count
 ```
-📸
+
+### Evidence
+
+📸 Screenshot:
+
 ![Failed login attempts for user thor](./images/q3-thor-fail-count.png)
 
-## 🧾 Evidence & Artifacts
+### Finding
 
-- 📂 `images/` – Contains snapshots of each query result  
-- 📜 `commands_used.md` – Includes all SPL queries  
-- 🧠 `findings.md` – Summary of identified attacker behaviors  
-- 🛡️ `notes/conclusion.md` – Write-up of security implications  
+The query calculated the total number of failed authentication attempts associated with user `thor`.
 
 ---
 
-## ✅ Conclusion
+# 🧾 Evidence & Artifacts
 
-This lab demonstrated how repeated SSH login failures can indicate brute-force activity. Using Splunk's powerful search capabilities and regular expressions, I extracted key evidence (usernames, IPs, counts) to support a security incident analysis. This workflow reflects common tasks performed by SOC analysts during authentication abuse investigations.
+Repository evidence:
+
+```
+📂 images/
+│
+├── q1-most-brute-user.png
+├── q2-thor-ip.png
+└── q3-thor-fail-count.png
+
+
+📜 commands_used.md
+```
+
+Contains:
+
+- SPL queries
+- Investigation commands
+- Analysis workflow
+
+
+```
+🧠 findings.md
+```
+
+Contains:
+
+- Identified attack patterns
+- Suspicious activity
+- Analyst conclusions
+
+
+```
+📝 notes/conclusion.md
+```
+
+Contains:
+
+- Security impact
+- Lessons learned
+- Recommendations
 
 ---
 
-## 🧠 Lessons Learned
+# 🚨 Incident Findings
 
-- Regular expressions can extract meaningful fields from syslog-style messages.
-- Brute-force patterns become obvious when visualized or summarized.
-- Identifying IPs early helps block malicious actors via firewalls (UFW, iptables, etc.)
+The investigation demonstrated characteristics commonly associated with SSH brute-force attacks:
+
+- Multiple failed authentication attempts
+- Repeated targeting of user accounts
+- Suspicious authentication patterns
+- Potential unauthorized access attempts
 
 ---
 
-## 📘 License
+# 🛡️ SOC Analyst Response Workflow
 
-This lab documentation is licensed under the **MIT License**.
+The investigation followed a standard incident response process:
+
+| Phase | Action |
+|---|---|
+| Detection | Identified failed SSH authentication activity |
+| Analysis | Used SPL queries to extract usernames and IPs |
+| Investigation | Correlated authentication attempts |
+| Containment | Recommended blocking malicious sources |
+| Documentation | Recorded findings and evidence |
+
+---
+
+# 🧠 Lessons Learned
+
+- Regular expressions are powerful for extracting fields from raw logs.
+- Authentication failures can reveal attack patterns.
+- SIEM tools allow analysts to quickly search large datasets.
+- Identifying attacker IP addresses supports containment actions.
+- SPL knowledge is essential for SOC analyst investigations.
+
+---
+
+# 🔐 Security Recommendations
+
+Recommended defensive actions:
+
+- Enable SSH key-based authentication
+- Disable password authentication where possible
+- Implement account lockout policies
+- Restrict SSH exposure using firewall rules
+- Deploy automated alerting for repeated failures
+- Integrate authentication monitoring into SIEM dashboards
+
+---
+
+# 📚 MITRE ATT&CK Mapping
+
+| Technique | Description |
+|---|---|
+| T1110 | Brute Force |
+| T1110.001 | Password Guessing |
+| T1078 | Valid Accounts |
+
+---
+
+# 📘 License
+
+This project is licensed under the MIT License.

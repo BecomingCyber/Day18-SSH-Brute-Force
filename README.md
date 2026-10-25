@@ -13,7 +13,7 @@
 
 # 🎯 Objective
 
-Detect and investigate SSH brute-force attacks using Splunk by analyzing Linux authentication logs.
+Investigate suspicious SSH authentication activity and potential brute-force attacks.
 
 The investigation focuses on identifying:
 
@@ -22,7 +22,39 @@ The investigation focuses on identifying:
 - Failed authentication patterns
 - Indicators of unauthorized access attempts
 
-This lab simulates a common SOC analyst workflow during an authentication abuse investigation.
+This lab simulates a common SOC analyst workflow for investigating authentication abuse.
+
+---
+
+## 🛡️ SOC Investigation Reports
+
+This repository includes two documented SOC investigation stages using simulated SSH authentication data.
+
+### 🔎 Tier 1: SSH Authentication Alert Triage
+
+[View Tier 1 Escalation Report](./reports/tier1_ssh_escalation.md)
+
+Documents the initial investigation of suspicious SSH authentication activity, including failed and successful login patterns, source IP identification, and the decision to escalate for further analysis.
+
+### 🔬 Tier 2: SSH Authentication Investigation
+
+[View Tier 2 Investigation Report](./reports/tier2_ssh_investigation.md)
+
+Documents a deeper investigation involving `service_account` and source IP `8.215.234.245`.
+
+**Key findings:**
+- 240 authentication events
+- 134 failed authentications
+- 106 successful authentications
+- Source IP registration analysis using APNIC RDAP
+- Evaluation of competing explanations
+- Identification of missing session and endpoint evidence
+
+**Final Disposition:** Inconclusive, Further Investigation Required.
+
+The investigation demonstrates evidence-based SOC analysis without assuming that successful authentication confirms unauthorized access.
+
+**Skills demonstrated:** Splunk, SSH log analysis, authentication correlation, threat investigation, incident escalation, and technical reporting.
 
 ---
 
@@ -43,7 +75,7 @@ This lab simulates a common SOC analyst workflow during an authentication abuse 
 
 ## 1. Configure Splunk
 
-Installed and configured Splunk for Linux authentication log analysis.
+Installed and configured Splunk to analyze Linux authentication logs.
 
 ## 2. Import Authentication Logs
 
@@ -99,13 +131,13 @@ index=main sourcetype=linux_secure source="linux_auth_logs.json" host="ubuntu"
 
 ### Finding
 
-The query identified the username generating the highest number of failed SSH authentication attempts.
+The query identified the username with the most failed SSH authentication attempts.
 
 ---
 
 # 🔸 Question 2
 
-## What is the IP address associated with user thor?
+## What IP address is associated with user thor?
 
 ### SPL Query
 
@@ -227,7 +259,7 @@ The investigation followed a standard incident response process:
 - Regular expressions are powerful for extracting fields from raw logs.
 - Authentication failures can reveal attack patterns.
 - SIEM tools allow analysts to quickly search large datasets.
-- Identifying attacker IP addresses supports containment actions.
+- Identifying suspicious source IP addresses supports further investigation and informed containment decisions.
 - SPL knowledge is essential for SOC analyst investigations.
 
 ---

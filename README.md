@@ -50,7 +50,7 @@ Documents a deeper investigation involving `service_account` and source IP `8.21
 - Evaluation of competing explanations
 - Identification of missing session and endpoint evidence
 
-**Final Disposition:** Inconclusive, Further Investigation Required.
+**Final Disposition:** Inconclusive; further investigation required.
 
 The investigation demonstrates evidence-based SOC analysis without assuming that successful authentication confirms unauthorized access.
 
@@ -68,6 +68,33 @@ The investigation demonstrates evidence-based SOC analysis without assuming that
 | Sourcetype | `linux_secure` |
 | Index | `main` |
 | Host | `ubuntu` |
+
+### Current Splunk Dataset Configuration
+
+The original lab screenshots document searches using `index=main`, `sourcetype=linux_secure`, and `host=ubuntu`.
+
+A subsequent investigation verified the SSH authentication dataset using the following Splunk ingestion metadata:
+
+| Field | Verified Value |
+|---|---|
+| Index | `soc_labs` |
+| Host | `NavyVet99` |
+| Sourcetype | `_json` |
+| Source | `linux_auth_logs.json` |
+| Total events | 3,000 |
+
+The current dataset reproduces the original finding of 119 failed SSH authentications for `thor` from source IP `98.110.184.71`.
+
+The reason for the difference between the original and current ingestion configurations has not been established.
+
+#### Reproducible SPL Query
+
+```spl
+index=soc_labs sourcetype="_json" source="linux_auth_logs.json" user="thor" event="Failed password"
+| stats count as failed_authentications by user source_ip
+```
+
+**Verified result:** `thor` | `98.110.184.71` | 119 failed authentications.
 
 ---
 

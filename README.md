@@ -131,7 +131,11 @@ index=main sourcetype=linux_secure source="linux_auth_logs.json" host="ubuntu"
 
 ### Finding
 
-The query identified the username with the most failed SSH authentication attempts.
+Splunk identified `service_account` as the username with the most failed SSH authentication attempts in the analyzed dataset (134 failures).
+
+This finding identifies the most frequently targeted account based on failed authentication counts. However, the failures alone do not establish whether the activity resulted from unauthorized password guessing, legitimate authentication errors, or misconfigured automation.
+
+Additional investigation is required before classifying the activity as a confirmed brute-force attack.
 
 ---
 
@@ -156,7 +160,9 @@ index=main sourcetype=linux_secure source="linux_auth_logs.json" host="ubuntu"
 
 ### Finding
 
-The investigation extracted the source IP address responsible for failed login attempts against user `thor`.
+Splunk identified source IP 98.110.184.71 associated with 119 failed SSH authentication attempts targeting user `thor`.
+
+This identifies the source of the failed authentication activity in the analyzed dataset. However, the source IP alone does not establish malicious intent or identify the individual responsible.
 
 ---
 
@@ -180,7 +186,11 @@ index=main sourcetype=linux_secure source="linux_auth_logs.json" host="ubuntu"
 
 ### Finding
 
-The query calculated the total number of failed authentication attempts associated with user `thor`.
+Splunk identified 119 failed SSH authentication attempts associated with user `thor` in the analyzed dataset.
+
+The repeated failures warrant further investigation to determine whether they resulted from legitimate authentication problems, misconfigured automation, or unauthorized password-guessing activity.
+
+The failure count alone does not confirm a brute-force attack or credential compromise.
 
 ---
 
